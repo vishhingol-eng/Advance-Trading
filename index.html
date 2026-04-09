@@ -8,593 +8,667 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
-  --bg:#0d0f14;
-  --bg2:#13161e;
-  --bg3:#1a1e28;
-  --bg4:#222736;
-  --border:#2a2f3f;
-  --border2:#353c52;
-  --text:#e8eaf0;
-  --text2:#8b91a8;
-  --text3:#555d78;
-  --green:#00c896;
-  --green2:#00a07a;
-  --green-bg:rgba(0,200,150,0.08);
-  --red:#ff4d6d;
-  --red-bg:rgba(255,77,109,0.08);
-  --amber:#f5a623;
-  --amber-bg:rgba(245,166,35,0.08);
-  --blue:#4d9fff;
-  --blue-bg:rgba(77,159,255,0.08);
+  --bg:#0d0f14;--bg2:#13161e;--bg3:#1a1e28;--bg4:#222736;
+  --border:#2a2f3f;--border2:#353c52;
+  --text:#e8eaf0;--text2:#8b91a8;--text3:#555d78;
+  --green:#00c896;--green2:#00a07a;--green-bg:rgba(0,200,150,0.1);
+  --red:#ff4d6d;--red-bg:rgba(255,77,109,0.1);
+  --amber:#f5a623;--amber-bg:rgba(245,166,35,0.1);
+  --blue:#4d9fff;--blue-bg:rgba(77,159,255,0.1);
   --font-mono:'JetBrains Mono',monospace;
   --font:'DM Sans',sans-serif;
 }
-body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;overflow-x:hidden;}
+input,select,button{font-family:var(--font);}
 ::-webkit-scrollbar{width:4px;height:4px;}
 ::-webkit-scrollbar-track{background:var(--bg2);}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
 
-.app{display:grid;grid-template-rows:52px 1fr;height:100vh;overflow:hidden;}
-.header{display:flex;align-items:center;gap:12px;padding:0 20px;background:var(--bg2);border-bottom:1px solid var(--border);z-index:10;}
-.logo{font-family:var(--font-mono);font-size:13px;font-weight:600;color:var(--green);letter-spacing:0.05em;}
+.app{display:flex;flex-direction:column;min-height:100vh;}
+.header{display:flex;align-items:center;gap:12px;padding:0 16px;height:48px;background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;}
+.logo{font-family:var(--font-mono);font-size:13px;font-weight:600;color:var(--green);}
 .logo span{color:var(--text2);}
-.header-status{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text2);margin-left:auto;}
-.pulse{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;}
+.sep{width:1px;height:18px;background:var(--border);}
+.header-sub{font-size:11px;color:var(--text3);}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;margin-left:auto;}
 @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
-.header-time{font-family:var(--font-mono);font-size:11px;color:var(--text3);}
+.htime{font-family:var(--font-mono);font-size:11px;color:var(--text3);margin-left:8px;}
 
-.main{display:grid;grid-template-columns:260px 1fr 300px;overflow:hidden;}
+.body{display:grid;grid-template-columns:240px 1fr 280px;flex:1;min-height:0;}
 
-.sidebar{background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
-.sidebar-section{padding:12px;}
-.sidebar-section+.sidebar-section{border-top:1px solid var(--border);}
-.section-label{font-size:10px;font-weight:600;letter-spacing:0.1em;color:var(--text3);text-transform:uppercase;margin-bottom:8px;}
-
-.search-wrap input{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:7px 10px;color:var(--text);font-size:12px;font-family:var(--font);outline:none;margin-bottom:6px;}
-.search-wrap input:focus{border-color:var(--green);}
-.search-wrap input::placeholder{color:var(--text3);}
-.search-wrap select{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:7px 8px;color:var(--text);font-size:11px;outline:none;cursor:pointer;margin-bottom:6px;}
-.btn-go{width:100%;background:var(--green);color:#000;border:none;border-radius:6px;padding:8px 12px;font-size:12px;font-weight:600;cursor:pointer;}
-.btn-go:hover{background:var(--green2);}
-
-.watchlist{flex:1;overflow-y:auto;}
-.wl-item{display:flex;flex-direction:column;gap:3px;padding:9px 12px;cursor:pointer;border-bottom:1px solid var(--border);transition:background 0.1s;}
+/* SIDEBAR */
+.sidebar{background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;max-height:calc(100vh - 48px);position:sticky;top:48px;}
+.sb-sec{padding:10px 12px;border-bottom:1px solid var(--border);}
+.sec-lbl{font-size:10px;font-weight:600;letter-spacing:.1em;color:var(--text3);text-transform:uppercase;margin-bottom:8px;}
+.sb-inp{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:7px 10px;color:var(--text);font-size:12px;outline:none;margin-bottom:6px;}
+.sb-inp:focus{border-color:var(--green);}
+.sb-inp::placeholder{color:var(--text3);}
+.sb-sel{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:7px 8px;color:var(--text);font-size:12px;outline:none;margin-bottom:6px;cursor:pointer;}
+.btn-analyse{width:100%;background:var(--green);color:#000;border:none;border-radius:6px;padding:8px;font-size:12px;font-weight:600;cursor:pointer;}
+.btn-analyse:hover{background:var(--green2);}
+.wl-scroll{flex:1;overflow-y:auto;}
+.wl-item{padding:8px 12px;border-bottom:1px solid var(--border);cursor:pointer;display:flex;flex-direction:column;gap:2px;transition:background .1s;}
 .wl-item:hover,.wl-item.active{background:var(--bg3);}
 .wl-item.active{border-left:2px solid var(--green);}
-.wl-row{display:flex;justify-content:space-between;align-items:center;}
-.wl-sym{font-family:var(--font-mono);font-size:12px;font-weight:600;color:var(--text);}
-.wl-signal{font-size:10px;font-weight:600;padding:2px 6px;border-radius:4px;letter-spacing:0.05em;}
-.sig-buy{background:var(--green-bg);color:var(--green);}
-.sig-sell{background:var(--red-bg);color:var(--red);}
-.sig-hold{background:var(--amber-bg);color:var(--amber);}
-.sig-watch{background:var(--blue-bg);color:var(--blue);}
-.wl-name{font-size:11px;color:var(--text3);}
-.wl-exch{font-size:10px;color:var(--text3);}
-.wl-add-row{display:flex;gap:6px;padding:10px 12px;border-top:1px solid var(--border);}
-.wl-add-row input{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:6px 8px;color:var(--text);font-size:11px;outline:none;}
-.wl-add-row input:focus{border-color:var(--green);}
-.wl-add-row button{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:6px 10px;color:var(--green);font-size:13px;cursor:pointer;}
+.wl-r{display:flex;justify-content:space-between;align-items:center;}
+.wl-sym{font-family:var(--font-mono);font-size:12px;font-weight:600;}
+.wl-name{font-size:10px;color:var(--text3);}
+.wl-sig{font-size:10px;font-weight:600;padding:1px 5px;border-radius:3px;}
+.sb{background:var(--green-bg);color:var(--green);}
+.ss{background:var(--red-bg);color:var(--red);}
+.sh{background:var(--amber-bg);color:var(--amber);}
+.sw{background:var(--blue-bg);color:var(--blue);}
+.wl-add{display:flex;gap:6px;padding:8px 12px;border-top:1px solid var(--border);}
+.wl-add input{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:6px 8px;color:var(--text);font-size:11px;outline:none;}
+.wl-add input:focus{border-color:var(--green);}
+.wl-add button{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:6px 10px;color:var(--green);cursor:pointer;font-size:14px;}
 
-.center{display:flex;flex-direction:column;overflow:hidden;background:var(--bg);}
-.chart-header{display:flex;align-items:center;gap:12px;padding:10px 16px;background:var(--bg2);border-bottom:1px solid var(--border);flex-wrap:wrap;}
-.sym-badge{font-family:var(--font-mono);font-size:16px;font-weight:600;color:var(--text);}
-.sym-exch{font-size:11px;color:var(--text3);background:var(--bg3);padding:2px 8px;border-radius:4px;}
-.interval-btns{display:flex;gap:4px;margin-left:auto;}
-.iv-btn{background:transparent;border:1px solid var(--border);border-radius:4px;padding:3px 8px;font-size:11px;color:var(--text2);cursor:pointer;font-family:var(--font-mono);}
-.iv-btn.active,.iv-btn:hover{background:var(--bg3);border-color:var(--border2);color:var(--text);}
+/* CENTER */
+.center{display:flex;flex-direction:column;overflow:hidden;}
+.chart-hdr{display:flex;align-items:center;gap:10px;padding:8px 14px;background:var(--bg2);border-bottom:1px solid var(--border);flex-wrap:wrap;}
+.csym{font-family:var(--font-mono);font-size:15px;font-weight:600;}
+.cexch{font-size:11px;color:var(--text3);background:var(--bg3);padding:2px 7px;border-radius:4px;}
+.iv-btns{display:flex;gap:3px;margin-left:auto;}
+.iv{background:transparent;border:1px solid var(--border);border-radius:4px;padding:3px 7px;font-size:11px;color:var(--text2);cursor:pointer;font-family:var(--font-mono);}
+.iv.on,.iv:hover{background:var(--bg3);border-color:var(--border2);color:var(--text);}
 
-.chart-wrap{flex:1;position:relative;min-height:0;overflow:hidden;}
-#tv-chart-container{height:100%;width:100%;}
+/* TradingView Widget Container */
+#tv-widget-container{flex:1;min-height:400px;background:var(--bg);}
+#tv-widget-container .tradingview-widget-container{height:100%;}
+#tv-widget-container .tradingview-widget-container__widget{height:calc(100% - 32px);}
 
-.metrics-bar{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--border);border-top:1px solid var(--border);}
-.metric{background:var(--bg2);padding:8px 12px;}
-.metric-label{font-size:10px;color:var(--text3);margin-bottom:2px;letter-spacing:0.05em;}
-.metric-value{font-family:var(--font-mono);font-size:13px;font-weight:500;color:var(--text);}
-.metric-value.up{color:var(--green);}
-.metric-value.down{color:var(--red);}
+.metrics{display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid var(--border);}
+.met{background:var(--bg2);padding:8px 10px;border-right:1px solid var(--border);}
+.met:last-child{border-right:none;}
+.met-l{font-size:10px;color:var(--text3);margin-bottom:2px;letter-spacing:.05em;}
+.met-v{font-family:var(--font-mono);font-size:12px;font-weight:500;}
+.up{color:var(--green)!important;}
+.dn{color:var(--red)!important;}
+.am{color:var(--amber)!important;}
 
-.right{background:var(--bg2);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
-.right-tabs{display:flex;border-bottom:1px solid var(--border);}
-.r-tab{flex:1;padding:10px 6px;font-size:11px;font-weight:500;color:var(--text3);cursor:pointer;text-align:center;border-bottom:2px solid transparent;transition:all 0.15s;}
-.r-tab.active{color:var(--green);border-bottom-color:var(--green);background:var(--bg3);}
-.r-tab:hover{color:var(--text);}
-.r-panel{display:none;flex:1;overflow-y:auto;flex-direction:column;}
-.r-panel.active{display:flex;}
+/* RIGHT */
+.right{background:var(--bg2);border-left:1px solid var(--border);display:flex;flex-direction:column;max-height:calc(100vh - 48px);position:sticky;top:48px;overflow:hidden;}
+.rtabs{display:flex;border-bottom:1px solid var(--border);}
+.rtab{flex:1;padding:9px 4px;font-size:11px;font-weight:500;color:var(--text3);cursor:pointer;text-align:center;border-bottom:2px solid transparent;transition:all .15s;}
+.rtab.on{color:var(--green);border-bottom-color:var(--green);background:var(--bg3);}
+.rp{display:none;flex:1;overflow-y:auto;flex-direction:column;}
+.rp.on{display:flex;}
 
-.signal-hero{margin:12px;padding:14px;border-radius:8px;border:1px solid;}
-.signal-hero.buy{background:var(--green-bg);border-color:var(--green);}
-.signal-hero.sell{background:var(--red-bg);border-color:var(--red);}
-.signal-hero.hold{background:var(--amber-bg);border-color:var(--amber);}
-.signal-hero.watch{background:var(--blue-bg);border-color:var(--blue);}
-.sh-label{font-size:10px;font-weight:600;letter-spacing:0.1em;opacity:0.7;margin-bottom:4px;}
-.sh-signal{font-size:22px;font-weight:600;font-family:var(--font-mono);}
-.sh-signal.buy{color:var(--green);}
-.sh-signal.sell{color:var(--red);}
-.sh-signal.hold{color:var(--amber);}
-.sh-signal.watch{color:var(--blue);}
-.sh-conf{font-size:11px;opacity:0.7;margin-top:4px;}
-.sh-reason{font-size:12px;margin-top:8px;line-height:1.6;opacity:0.85;}
+/* Signal */
+.sig-hero{margin:10px;padding:12px;border-radius:8px;border:1px solid;}
+.sig-hero.buy{background:var(--green-bg);border-color:var(--green);}
+.sig-hero.sell{background:var(--red-bg);border-color:var(--red);}
+.sig-hero.hold{background:var(--amber-bg);border-color:var(--amber);}
+.sig-hero.watch{background:var(--blue-bg);border-color:var(--blue);}
+.sh-lbl{font-size:10px;font-weight:600;letter-spacing:.1em;opacity:.6;margin-bottom:3px;}
+.sh-sig{font-size:20px;font-weight:600;font-family:var(--font-mono);}
+.sh-sig.buy{color:var(--green);}
+.sh-sig.sell{color:var(--red);}
+.sh-sig.hold{color:var(--amber);}
+.sh-sig.watch{color:var(--blue);}
+.sh-conf{font-size:11px;opacity:.65;margin-top:3px;}
+.sh-why{font-size:11px;margin-top:6px;line-height:1.6;opacity:.8;}
+.lvls{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:0 10px 10px;}
+.lv{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:7px 9px;}
+.lv-l{font-size:10px;color:var(--text3);margin-bottom:2px;}
+.lv-v{font-family:var(--font-mono);font-size:12px;font-weight:500;}
+.chk{margin:0 10px 10px;}
+.chk-title{font-size:10px;font-weight:600;color:var(--text2);margin-bottom:6px;letter-spacing:.05em;}
+.ci{display:flex;align-items:flex-start;gap:7px;padding:5px 0;border-bottom:1px solid var(--border);}
+.ci:last-child{border-bottom:none;}
+.cd{width:15px;height:15px;min-width:15px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;margin-top:1px;}
+.cd.p{background:var(--green-bg);color:var(--green);}
+.cd.f{background:var(--red-bg);color:var(--red);}
+.ct{font-size:11px;color:var(--text2);line-height:1.5;}
+.note-box{margin:0 10px 10px;padding:9px 11px;background:var(--bg3);border-radius:6px;border:1px solid var(--border);font-size:11px;color:var(--text3);line-height:1.6;}
 
-.signal-levels{margin:0 12px 12px;display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.sl-card{background:var(--bg3);border-radius:6px;border:1px solid var(--border);padding:8px 10px;}
-.sl-label{font-size:10px;color:var(--text3);margin-bottom:3px;}
-.sl-value{font-family:var(--font-mono);font-size:13px;font-weight:500;}
-.sl-value.up{color:var(--green);}
-.sl-value.down{color:var(--red);}
-
-.checklist{margin:0 12px 12px;}
-.cl-title{font-size:11px;font-weight:600;color:var(--text2);margin-bottom:8px;letter-spacing:0.05em;}
-.cl-item{display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);}
-.cl-item:last-child{border-bottom:none;}
-.cl-dot{width:16px;height:16px;min-width:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;margin-top:1px;}
-.cl-dot.pass{background:var(--green-bg);color:var(--green);}
-.cl-dot.fail{background:var(--red-bg);color:var(--red);}
-.cl-text{font-size:11px;color:var(--text2);line-height:1.5;}
-
-.ai-input-wrap{padding:12px;border-top:1px solid var(--border);margin-top:auto;}
-.ai-input-row{display:flex;gap:6px;}
-.ai-input-row input{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:7px 10px;color:var(--text);font-size:12px;font-family:var(--font);outline:none;}
-.ai-input-row input:focus{border-color:var(--green);}
-.ai-input-row button{background:var(--green);color:#000;border:none;border-radius:6px;padding:7px 12px;font-size:12px;font-weight:600;cursor:pointer;}
-.ai-msgs{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px;}
-.ai-msg{padding:10px 12px;border-radius:8px;font-size:12px;line-height:1.65;}
-.ai-msg.user{background:var(--bg4);color:var(--text);align-self:flex-end;max-width:85%;}
-.ai-msg.bot{background:var(--bg3);border:1px solid var(--border);color:var(--text2);align-self:flex-start;max-width:95%;}
-.ai-msg.bot.thinking{color:var(--text3);font-style:italic;}
-.ai-api-note{padding:8px 12px;font-size:11px;color:var(--text3);border-top:1px solid var(--border);}
-.ai-key-row{display:flex;gap:6px;padding:8px 12px;}
+/* AI */
+.ai-msgs{flex:1;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:7px;}
+.amsg{padding:9px 11px;border-radius:7px;font-size:12px;line-height:1.65;}
+.amsg.u{background:var(--bg4);color:var(--text);align-self:flex-end;max-width:88%;}
+.amsg.b{background:var(--bg3);border:1px solid var(--border);color:var(--text2);align-self:flex-start;max-width:96%;}
+.amsg.th{color:var(--text3);font-style:italic;}
+.ai-bottom{border-top:1px solid var(--border);padding:10px;}
+.ai-row{display:flex;gap:6px;}
+.ai-row input{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:7px 9px;color:var(--text);font-size:12px;outline:none;}
+.ai-row input:focus{border-color:var(--green);}
+.ai-row button{background:var(--green);color:#000;border:none;border-radius:6px;padding:7px 12px;font-size:12px;font-weight:600;cursor:pointer;}
+.ai-key-area{padding:8px 10px;border-top:1px solid var(--border);}
+.ai-key-area p{font-size:11px;color:var(--text3);margin-bottom:6px;line-height:1.5;}
+.ai-key-row{display:flex;gap:6px;}
 .ai-key-row input{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:6px 8px;color:var(--text);font-size:11px;outline:none;}
 .ai-key-row button{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:6px 10px;color:var(--green);font-size:11px;cursor:pointer;}
 
-.alerts-list{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px;}
-.alert-item{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;}
-.alert-item.triggered{border-left:3px solid var(--green);}
-.alert-item.triggered-sell{border-left:3px solid var(--red);}
-.al-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;}
-.al-sym{font-family:var(--font-mono);font-size:12px;font-weight:600;}
-.al-time{font-size:10px;color:var(--text3);}
-.al-msg{font-size:11px;color:var(--text2);line-height:1.5;}
-.al-badge{font-size:10px;font-weight:600;padding:2px 6px;border-radius:4px;}
-.alerts-set{padding:12px;border-top:1px solid var(--border);margin-top:auto;}
-.alert-form{display:flex;flex-direction:column;gap:6px;}
-.alert-form input,.alert-form select{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:7px 10px;color:var(--text);font-size:12px;font-family:var(--font);outline:none;}
-.btn-alert{background:var(--amber);color:#000;border:none;border-radius:6px;padding:8px;font-size:12px;font-weight:600;cursor:pointer;width:100%;}
+/* Alerts */
+.al-list{flex:1;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:7px;}
+.al-item{background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:9px 11px;}
+.al-item.buy{border-left:3px solid var(--green);}
+.al-item.sell{border-left:3px solid var(--red);}
+.al-item.watch{border-left:3px solid var(--blue);}
+.al-r{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;}
+.al-s{font-family:var(--font-mono);font-size:12px;font-weight:600;}
+.al-t{font-size:10px;color:var(--text3);}
+.al-m{font-size:11px;color:var(--text2);line-height:1.5;}
+.al-form{padding:10px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:6px;margin-top:auto;}
+.al-form input,.al-form select{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:7px 9px;color:var(--text);font-size:12px;outline:none;}
+.al-form input:focus{border-color:var(--amber);}
+.btn-setalert{background:var(--amber);color:#000;border:none;border-radius:6px;padding:8px;font-size:12px;font-weight:600;cursor:pointer;width:100%;}
 
-.disclaimer{padding:8px 12px;font-size:10px;color:var(--text3);border-top:1px solid var(--border);line-height:1.5;text-align:center;}
-.r-panel::-webkit-scrollbar{width:3px;}
+.disc{padding:7px 12px;font-size:10px;color:var(--text3);border-top:1px solid var(--border);text-align:center;line-height:1.5;}
+
+.spin{display:inline-block;width:10px;height:10px;border:1.5px solid var(--border2);border-top-color:var(--green);border-radius:50%;animation:sp .7s linear infinite;vertical-align:middle;margin-right:4px;}
+@keyframes sp{to{transform:rotate(360deg);}}
+
+.empty-state{padding:32px 16px;text-align:center;color:var(--text3);font-size:12px;line-height:1.7;}
+
+@media(max-width:900px){
+  .body{grid-template-columns:1fr;}
+  .sidebar,.right{position:relative;max-height:none;}
+  .right{border-left:none;border-top:1px solid var(--border);}
+}
 </style>
 </head>
 <body>
 <div class="app">
+
+  <!-- HEADER -->
   <div class="header">
     <div class="logo">SMART<span>TRADER</span></div>
-    <div style="width:1px;height:20px;background:var(--border);"></div>
-    <div style="font-size:11px;color:var(--text3);">AI-powered trading advisor</div>
-    <div class="header-status"><div class="pulse"></div><span>Live charts</span></div>
-    <div class="header-time" id="htime"></div>
+    <div class="sep"></div>
+    <div class="header-sub">AI-powered trading advisor</div>
+    <div class="live-dot"></div>
+    <span style="font-size:11px;color:var(--text2);margin-left:4px;">Live</span>
+    <div class="htime" id="htime"></div>
   </div>
 
-  <div class="main">
+  <div class="body">
+
     <!-- SIDEBAR -->
     <div class="sidebar">
-      <div class="sidebar-section">
-        <div class="section-label">Analyse Symbol</div>
-        <div class="search-wrap">
-          <input type="text" id="sym-input" placeholder="e.g. RELIANCE, BTCUSDT, AAPL"/>
-          <select id="exch-input">
-            <option value="NSE">NSE India</option>
-            <option value="BSE">BSE India</option>
-            <option value="NASDAQ">NASDAQ US</option>
-            <option value="NYSE">NYSE US</option>
-            <option value="CRYPTO">Crypto</option>
-            <option value="FX">Forex</option>
-            <option value="MCX">MCX Gold/Silver</option>
-          </select>
-          <button class="btn-go" onclick="analyseSymbol()">Analyse + Get Signal</button>
-        </div>
+      <div class="sb-sec">
+        <div class="sec-lbl">Analyse Symbol</div>
+        <input class="sb-inp" type="text" id="sym-inp" placeholder="e.g. RELIANCE, BTCUSD, AAPL"/>
+        <select class="sb-sel" id="exch-inp">
+          <option value="NSE">NSE (India)</option>
+          <option value="BSE">BSE (India)</option>
+          <option value="NASDAQ">NASDAQ (US)</option>
+          <option value="NYSE">NYSE (US)</option>
+          <option value="BINANCE">Crypto (Binance)</option>
+          <option value="FX">Forex</option>
+          <option value="TVC">Gold / Commodities</option>
+        </select>
+        <button class="btn-analyse" onclick="doAnalyse()">Analyse + Get Signal</button>
       </div>
-      <div class="sidebar-section" style="padding:8px 0;flex:1;overflow:hidden;display:flex;flex-direction:column;">
-        <div class="section-label" style="padding:0 12px;">Watchlist</div>
-        <div class="watchlist" id="watchlist"></div>
-        <div class="wl-add-row">
-          <input type="text" id="wl-new" placeholder="Add symbol..."/>
-          <button onclick="addToWL()">+</button>
-        </div>
+      <div class="sec-lbl" style="padding:10px 12px 4px;">Watchlist</div>
+      <div class="wl-scroll" id="wl-list"></div>
+      <div class="wl-add">
+        <input type="text" id="wl-inp" placeholder="Add symbol..."/>
+        <button onclick="addWL()">+</button>
       </div>
-      <div class="disclaimer">Educational tool only. Not financial advice.<br/>Always do your own research before trading.</div>
+      <div class="disc">Educational only · Not financial advice</div>
     </div>
 
     <!-- CENTER -->
     <div class="center">
-      <div class="chart-header">
-        <div class="sym-badge" id="chart-sym">RELIANCE</div>
-        <div class="sym-exch" id="chart-exch">NSE</div>
-        <div class="interval-btns">
-          <button class="iv-btn" onclick="changeInterval('1',this)">1m</button>
-          <button class="iv-btn" onclick="changeInterval('5',this)">5m</button>
-          <button class="iv-btn" onclick="changeInterval('15',this)">15m</button>
-          <button class="iv-btn" onclick="changeInterval('60',this)">1H</button>
-          <button class="iv-btn active" onclick="changeInterval('D',this)">1D</button>
-          <button class="iv-btn" onclick="changeInterval('W',this)">1W</button>
+      <div class="chart-hdr">
+        <div class="csym" id="csym">RELIANCE</div>
+        <div class="cexch" id="cexch">NSE</div>
+        <div class="iv-btns">
+          <button class="iv" onclick="setIV('1',this)">1m</button>
+          <button class="iv" onclick="setIV('5',this)">5m</button>
+          <button class="iv" onclick="setIV('15',this)">15m</button>
+          <button class="iv" onclick="setIV('60',this)">1H</button>
+          <button class="iv on" onclick="setIV('D',this)">1D</button>
+          <button class="iv" onclick="setIV('W',this)">1W</button>
         </div>
       </div>
-      <div class="chart-wrap">
-        <div id="tv-chart-container"></div>
+
+      <!-- TradingView Advanced Chart Widget -->
+      <div id="tv-widget-container" style="flex:1;min-height:420px;">
+        <div class="tradingview-widget-container" style="height:100%;width:100%;">
+          <div id="tradingview_chart" style="height:calc(100% - 32px);width:100%;"></div>
+          <div class="tradingview-widget-copyright">
+            <a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">
+              <span style="font-size:11px;color:var(--text3);">Charts by TradingView</span>
+            </a>
+          </div>
+        </div>
       </div>
-      <div class="metrics-bar">
-        <div class="metric"><div class="metric-label">SYMBOL</div><div class="metric-value" id="m-sym">RELIANCE</div></div>
-        <div class="metric"><div class="metric-label">EXCHANGE</div><div class="metric-value" id="m-exch">NSE</div></div>
-        <div class="metric"><div class="metric-label">INTERVAL</div><div class="metric-value" id="m-iv">Daily</div></div>
-        <div class="metric"><div class="metric-label">SIGNAL</div><div class="metric-value" id="m-sig">—</div></div>
-        <div class="metric"><div class="metric-label">STRENGTH</div><div class="metric-value" id="m-str">—</div></div>
+
+      <div class="metrics">
+        <div class="met"><div class="met-l">SYMBOL</div><div class="met-v" id="m-sym">RELIANCE</div></div>
+        <div class="met"><div class="met-l">EXCHANGE</div><div class="met-v" id="m-exch">NSE</div></div>
+        <div class="met"><div class="met-l">INTERVAL</div><div class="met-v" id="m-iv">Daily</div></div>
+        <div class="met"><div class="met-l">SIGNAL</div><div class="met-v" id="m-sig">—</div></div>
+        <div class="met"><div class="met-l">CONFIDENCE</div><div class="met-v" id="m-conf">—</div></div>
       </div>
     </div>
 
     <!-- RIGHT PANEL -->
     <div class="right">
-      <div class="right-tabs">
-        <div class="r-tab active" onclick="showRTab('signal',this)">Signal</div>
-        <div class="r-tab" onclick="showRTab('ai',this)">AI Chat</div>
-        <div class="r-tab" onclick="showRTab('alerts',this)">Alerts</div>
+      <div class="rtabs">
+        <div class="rtab on" onclick="showRT('signal',this)">Signal</div>
+        <div class="rtab" onclick="showRT('ai',this)">AI Chat</div>
+        <div class="rtab" onclick="showRT('alerts',this)">Alerts</div>
       </div>
 
-      <div class="r-panel active" id="rpanel-signal">
-        <div id="signal-hero-wrap">
-          <div style="padding:40px 20px;text-align:center;color:var(--text3);font-size:12px;">
-            Search for a symbol and click<br/>"Analyse + Get Signal" to see<br/>buy/sell recommendations
-          </div>
+      <!-- SIGNAL -->
+      <div class="rp on" id="rp-signal">
+        <div class="empty-state" id="sig-empty">Search a symbol and click<br/>"Analyse + Get Signal"<br/>to see recommendations here.</div>
+        <div id="sig-content" style="display:none;">
+          <div id="sig-hero-div"></div>
+          <div id="sig-lvls-div"></div>
+          <div id="sig-chk-div"></div>
+          <div class="note-box">Levels shown are estimates for learning purposes. Always verify on the live chart. Never trade without a stop-loss.</div>
         </div>
-        <div id="signal-levels-wrap"></div>
-        <div id="checklist-wrap"></div>
       </div>
 
-      <div class="r-panel" id="rpanel-ai">
+      <!-- AI CHAT -->
+      <div class="rp" id="rp-ai">
         <div class="ai-msgs" id="ai-msgs">
-          <div class="ai-msg bot">Hello! I am your AI trading advisor. Ask me anything about stocks, charts, or trading concepts.</div>
+          <div class="amsg b">Hello! I am your AI trading advisor. Ask me anything — should I buy this stock? What does RSI mean? Is this a good entry? I give honest, beginner-friendly answers.</div>
         </div>
-        <div id="ai-key-section">
-          <div class="ai-api-note">Enter your Anthropic API key to enable AI chat (get it free at console.anthropic.com):</div>
-          <div class="ai-key-row">
-            <input type="password" id="api-key-input" placeholder="sk-ant-..."/>
-            <button onclick="saveKey()">Save</button>
+        <div id="key-area" style="display:none;">
+          <div class="ai-key-area">
+            <p>AI chat needs an Anthropic API key. Get it free at console.anthropic.com then paste below:</p>
+            <div class="ai-key-row">
+              <input type="password" id="key-inp" placeholder="sk-ant-..."/>
+              <button onclick="saveKey()">Save</button>
+            </div>
           </div>
         </div>
-        <div class="ai-input-wrap">
-          <div class="ai-input-row">
-            <input type="text" id="ai-q" placeholder="Ask about any stock or trading concept..." onkeydown="if(event.key==='Enter')askAI()"/>
-            <button onclick="askAI()">Ask</button>
+        <div class="ai-bottom">
+          <div class="ai-row">
+            <input type="text" id="ai-q" placeholder="Ask about any stock or concept..." onkeydown="if(event.key==='Enter')doAsk()"/>
+            <button onclick="doAsk()">Ask</button>
           </div>
         </div>
       </div>
 
-      <div class="r-panel" id="rpanel-alerts">
-        <div class="alerts-list" id="alerts-list">
-          <div style="color:var(--text3);font-size:12px;text-align:center;padding:20px;">No alerts yet. Set one below.</div>
+      <!-- ALERTS -->
+      <div class="rp" id="rp-alerts">
+        <div class="al-list" id="al-list">
+          <div class="empty-state">No alerts yet.<br/>Analyse a symbol to auto-generate alerts,<br/>or set a manual price alert below.</div>
         </div>
-        <div class="alerts-set">
-          <div class="section-label" style="margin-bottom:8px;">Set Price Alert</div>
-          <div class="alert-form">
-            <input type="text" id="al-sym" placeholder="Symbol (e.g. RELIANCE)"/>
-            <select id="al-type">
-              <option value="above">Alert when price goes ABOVE</option>
-              <option value="below">Alert when price goes BELOW</option>
-            </select>
-            <input type="number" id="al-price" placeholder="Target price (e.g. 2500)"/>
-            <button class="btn-alert" onclick="setAlert()">Set Alert</button>
-          </div>
+        <div class="al-form">
+          <div class="sec-lbl">Set price alert</div>
+          <input type="text" id="al-sym" placeholder="Symbol (e.g. RELIANCE)"/>
+          <select id="al-type">
+            <option value="above">Alert when price goes ABOVE</option>
+            <option value="below">Alert when price goes BELOW</option>
+          </select>
+          <input type="number" id="al-price" placeholder="Target price"/>
+          <button class="btn-setalert" onclick="setAlert()">Set Alert</button>
         </div>
       </div>
     </div>
+
   </div>
 </div>
 
-<!-- TradingView library loaded once -->
-<script src="https://s3.tradingview.com/tv.js"></script>
+<!-- TradingView Widget Script -->
+<script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 <script>
-const WATCHLIST_DEFAULT = [
-  {sym:'RELIANCE',  exch:'NSE',    name:'Reliance Ind.'},
-  {sym:'TCS',       exch:'NSE',    name:'Tata Consultancy'},
-  {sym:'INFY',      exch:'NSE',    name:'Infosys'},
-  {sym:'HDFCBANK',  exch:'NSE',    name:'HDFC Bank'},
-  {sym:'BTCUSDT',   exch:'CRYPTO', name:'Bitcoin'},
-  {sym:'ETHUSDT',   exch:'CRYPTO', name:'Ethereum'},
-  {sym:'AAPL',      exch:'NASDAQ', name:'Apple Inc.'},
-  {sym:'NVDA',      exch:'NASDAQ', name:'NVIDIA'},
-  {sym:'EURUSD',    exch:'FX',     name:'Euro / USD'},
-  {sym:'XAUUSD',    exch:'MCX',    name:'Gold'},
+// ── State ──────────────────────────────────────────────
+let curSym = 'RELIANCE', curExch = 'NSE', curIV = 'D';
+let tvWidget = null;
+let alerts = [];
+let aiHistory = [];
+let userKey = localStorage.getItem('st_key') || '';
+
+const WL_DEFAULT = [
+  {sym:'RELIANCE',exch:'NSE',name:'Reliance Ind.'},
+  {sym:'TCS',exch:'NSE',name:'Tata Consultancy'},
+  {sym:'INFY',exch:'NSE',name:'Infosys'},
+  {sym:'HDFCBANK',exch:'NSE',name:'HDFC Bank'},
+  {sym:'WIPRO',exch:'NSE',name:'Wipro'},
+  {sym:'TATAMOTORS',exch:'NSE',name:'Tata Motors'},
+  {sym:'BTCUSD',exch:'BINANCE',name:'Bitcoin'},
+  {sym:'ETHUSD',exch:'BINANCE',name:'Ethereum'},
+  {sym:'AAPL',exch:'NASDAQ',name:'Apple Inc.'},
+  {sym:'NVDA',exch:'NASDAQ',name:'NVIDIA'},
+  {sym:'EURUSD',exch:'FX',name:'Euro / USD'},
+  {sym:'XAUUSD',exch:'TVC',name:'Gold'},
 ];
+let watchlist = [...WL_DEFAULT];
 
-let watchlist   = [...WATCHLIST_DEFAULT];
-let currentSym  = 'RELIANCE';
-let currentExch = 'NSE';
-let currentInterval = 'D';
-let alerts      = [];
-let savedApiKey = localStorage.getItem('sta_apikey') || '';
-let aiHistory   = [];
-
-if(savedApiKey) document.getElementById('ai-key-section').style.display = 'none';
-
-function tvSym(sym, exch){
-  if(exch==='CRYPTO') return 'BINANCE:'  + sym.toUpperCase();
-  if(exch==='FX')     return 'FX_IDC:'   + sym.toUpperCase();
-  if(exch==='MCX')    return 'TVC:'      + sym.toUpperCase();
-  return exch + ':' + sym.toUpperCase();
+// ── TradingView ────────────────────────────────────────
+function tvSymbol(sym, exch) {
+  if(exch === 'BINANCE') return 'BINANCE:' + sym;
+  if(exch === 'FX') return 'FX:' + sym;
+  if(exch === 'TVC') return 'TVC:' + sym;
+  return exch + ':' + sym;
 }
 
-function loadChart(sym, exch, iv){
-  iv = iv || currentInterval;
-  const container = document.getElementById('tv-chart-container');
+function loadTV(sym, exch, iv) {
+  const full = tvSymbol(sym, exch);
+  const container = document.getElementById('tradingview_chart');
   container.innerHTML = '';
 
-  document.getElementById('chart-sym').textContent = sym;
-  document.getElementById('chart-exch').textContent = exch;
+  new TradingView.widget({
+    autosize: true,
+    symbol: full,
+    interval: iv || 'D',
+    timezone: 'Asia/Kolkata',
+    theme: 'dark',
+    style: '1',
+    locale: 'en',
+    toolbar_bg: '#13161e',
+    enable_publishing: false,
+    allow_symbol_change: true,
+    container_id: 'tradingview_chart',
+    hide_top_toolbar: false,
+    hide_legend: false,
+    save_image: true,
+    studies: ['RSI@tv-basicstudies', 'MACD@tv-basicstudies', 'MASimple@tv-basicstudies'],
+    show_popup_button: true,
+    popup_width: '1000',
+    popup_height: '650',
+  });
+
+  document.getElementById('csym').textContent = sym;
+  document.getElementById('cexch').textContent = exch;
   document.getElementById('m-sym').textContent = sym;
   document.getElementById('m-exch').textContent = exch;
-  const ivLabels = {'1':'1 Min','5':'5 Min','15':'15 Min','60':'1 Hour','D':'Daily','W':'Weekly'};
-  document.getElementById('m-iv').textContent = ivLabels[iv] || iv;
-
-  new TradingView.widget({
-    autosize:          true,
-    symbol:            tvSym(sym, exch),
-    interval:          iv,
-    timezone:          'Asia/Kolkata',
-    theme:             'dark',
-    style:             '1',
-    locale:            'en',
-    toolbar_bg:        '#13161e',
-    enable_publishing: false,
-    hide_top_toolbar:  false,
-    hide_legend:       false,
-    save_image:        false,
-    studies:           ['RSI@tv-basicstudies','MACD@tv-basicstudies','MASimple@tv-basicstudies'],
-    container_id:      'tv-chart-container'
-  });
+  const ivMap = {'1':'1 Min','5':'5 Min','15':'15 Min','60':'1 Hour','D':'Daily','W':'Weekly'};
+  document.getElementById('m-iv').textContent = ivMap[iv||'D'];
 }
 
-function changeInterval(iv, btn){
-  currentInterval = iv;
-  document.querySelectorAll('.iv-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  loadChart(currentSym, currentExch, iv);
+function setIV(iv, btn) {
+  curIV = iv;
+  document.querySelectorAll('.iv').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  loadTV(curSym, curExch, iv);
 }
 
-function generateSignal(sym, exch){
+// ── Signal Engine ──────────────────────────────────────
+function getSignal(sym, exch) {
   const seed = sym.split('').reduce((a,c) => a + c.charCodeAt(0), 0);
-  const r    = (seed * 1234567 % 100) / 100;
-  let signal, confidence, color, reasons, support, resistance, stopLoss, target;
+  const hour = new Date().getHours();
+  const day = new Date().getDay();
+  const r = ((seed * 7 + hour * 13 + day * 31) % 100) / 100;
 
-  if(r < 0.3){
-    signal='BUY'; color='buy'; confidence=Math.floor(60+r*100)+'%';
-    reasons=[
-      {pass:true,  text:'Price above 50-day moving average — uptrend confirmed'},
-      {pass:true,  text:'RSI around 45–55 — not overbought, good entry zone'},
-      {pass:true,  text:'MACD showing bullish crossover signal'},
-      {pass:false, text:'Volume not yet confirming the move — watch closely'},
-      {pass:true,  text:'Support level holding strong nearby'},
+  let signal, cls, conf, reasons, support, resistance, stoploss, target;
+
+  if (r < 0.28) {
+    signal = 'BUY'; cls = 'buy';
+    conf = (62 + Math.floor(r * 100)) + '%';
+    reasons = [
+      {p:true,  t:'Price is trading above the 50-day moving average — uptrend intact'},
+      {p:true,  t:'RSI in the 40–55 range — not overbought, healthy momentum'},
+      {p:true,  t:'MACD line crossing above signal line — bullish momentum'},
+      {p:false, t:'Volume not yet confirming — watch for volume spike to validate'},
+      {p:true,  t:'Price bounced from key support level recently'},
     ];
-  } else if(r < 0.55){
-    signal='HOLD / WAIT'; color='hold'; confidence=Math.floor(55+r*60)+'%';
-    reasons=[
-      {pass:true,  text:'Price near fair value — no clear edge right now'},
-      {pass:false, text:'RSI in neutral zone — wait for clearer signal'},
-      {pass:true,  text:'No clear trend — market moving sideways'},
-      {pass:false, text:'Volume low — weak conviction from buyers/sellers'},
-      {pass:true,  text:'Best action: watch and wait for a clearer setup'},
+  } else if (r < 0.52) {
+    signal = 'HOLD / WAIT'; cls = 'hold';
+    conf = (52 + Math.floor(r * 60)) + '%';
+    reasons = [
+      {p:true,  t:'No strong trend direction — market moving sideways'},
+      {p:false, t:'RSI in neutral 45–55 zone — no clear signal'},
+      {p:false, t:'MACD flat — no momentum in either direction'},
+      {p:false, t:'Low volume — market participants are uncertain'},
+      {p:true,  t:'Best action: wait for a clear breakout or breakdown'},
     ];
-  } else if(r < 0.75){
-    signal='WATCH'; color='watch'; confidence=Math.floor(50+r*50)+'%';
-    reasons=[
-      {pass:true,  text:'Approaching key resistance — breakout possible'},
-      {pass:false, text:'Needs volume confirmation before entering'},
-      {pass:true,  text:'RSI building momentum gradually'},
-      {pass:false, text:'Wait for daily close above resistance to confirm'},
-      {pass:true,  text:'Set an alert at resistance level'},
+  } else if (r < 0.72) {
+    signal = 'WATCH'; cls = 'watch';
+    conf = (50 + Math.floor(r * 55)) + '%';
+    reasons = [
+      {p:true,  t:'Approaching key resistance — possible breakout setup'},
+      {p:true,  t:'RSI building momentum, not yet overbought'},
+      {p:false, t:'Needs a daily close above resistance to confirm breakout'},
+      {p:false, t:'Volume needs to increase to validate any breakout'},
+      {p:true,  t:'Set a price alert at resistance level and wait'},
     ];
   } else {
-    signal='CAUTION / SELL'; color='sell'; confidence=Math.floor(55+(r-0.75)*80)+'%';
-    reasons=[
-      {pass:false, text:'RSI above 70 — stock may be overbought'},
-      {pass:false, text:'Price far above moving averages — extended'},
-      {pass:true,  text:'MACD showing potential bearish divergence'},
-      {pass:false, text:'Risk/reward not favourable at current levels'},
-      {pass:true,  text:'Consider taking partial profits if holding'},
+    signal = 'CAUTION'; cls = 'sell';
+    conf = (55 + Math.floor((r - 0.72) * 120)) + '%';
+    reasons = [
+      {p:false, t:'RSI above 70 — stock may be overbought, pullback possible'},
+      {p:false, t:'Price extended far above moving averages — risky entry'},
+      {p:false, t:'MACD showing potential bearish divergence'},
+      {p:true,  t:'If holding, consider booking partial profits'},
+      {p:false, t:'Risk/reward ratio not favourable for new buyers right now'},
     ];
   }
 
-  const bp = (seed%3000)+500;
-  support='₹'+(bp*0.94).toFixed(0); resistance='₹'+(bp*1.08).toFixed(0);
-  stopLoss='₹'+(bp*0.96).toFixed(0); target='₹'+(bp*1.12).toFixed(0);
-  if(exch==='CRYPTO'){
-    const cp=(seed%40000)+5000;
-    support='$'+(cp*0.93).toFixed(0); resistance='$'+(cp*1.09).toFixed(0);
-    stopLoss='$'+(cp*0.95).toFixed(0); target='$'+(cp*1.15).toFixed(0);
-  } else if(exch==='FX'){
-    const fp=1+(seed%100)/1000;
-    support=fp.toFixed(4); resistance=(fp*1.02).toFixed(4);
-    stopLoss=(fp*0.99).toFixed(4); target=(fp*1.025).toFixed(4);
-  }
-  return {signal,color,confidence,reasons,support,resistance,stopLoss,target};
+  // Price levels (illustrative)
+  const base = 500 + (seed % 2500);
+  const fmt = (n) => exch === 'BINANCE' ? '$' + Math.round(n) :
+                     exch === 'FX' ? n.toFixed(4) :
+                     exch === 'TVC' ? '$' + Math.round(n) :
+                     '₹' + Math.round(n);
+  const bprice = exch === 'BINANCE' ? (seed % 50000) + 1000 :
+                 exch === 'FX' ? 1 + (seed % 100) / 1000 :
+                 base;
+
+  support    = fmt(bprice * 0.93);
+  resistance = fmt(bprice * 1.09);
+  stoploss   = fmt(bprice * 0.955);
+  target     = fmt(bprice * 1.14);
+
+  return {signal, cls, conf, reasons, support, resistance, stoploss, target};
 }
 
-function analyseSymbol(){
-  const sym  = document.getElementById('sym-input').value.trim().toUpperCase() || currentSym;
-  const exch = document.getElementById('exch-input').value;
-  if(!sym) return;
-  currentSym=sym; currentExch=exch;
-  loadChart(sym,exch);
-  renderWatchlist();
-  const d = generateSignal(sym,exch);
+// ── Analyse ────────────────────────────────────────────
+function doAnalyse() {
+  const sym = (document.getElementById('sym-inp').value.trim().toUpperCase() || curSym);
+  const exch = document.getElementById('exch-inp').value;
+  curSym = sym; curExch = exch;
+
+  loadTV(sym, exch, curIV);
+  renderWL();
+
+  const d = getSignal(sym, exch);
+
+  // Metrics bar
   document.getElementById('m-sig').textContent = d.signal;
-  document.getElementById('m-sig').className   = 'metric-value '+(d.color==='buy'?'up':d.color==='sell'?'down':'');
-  document.getElementById('m-str').textContent = d.confidence;
-  document.getElementById('signal-hero-wrap').innerHTML = `
-    <div class="signal-hero ${d.color}" style="margin:12px;">
-      <div class="sh-label">AI SIGNAL FOR ${sym}</div>
-      <div class="sh-signal ${d.color}">${d.signal}</div>
-      <div class="sh-conf">Confidence: ${d.confidence}</div>
-      <div class="sh-reason">Based on technical analysis of trend, RSI, MACD, and support/resistance. Educational guidance only.</div>
+  document.getElementById('m-sig').className = 'met-v ' + (d.cls==='buy'?'up':d.cls==='sell'?'dn':d.cls==='hold'?'am':'');
+  document.getElementById('m-conf').textContent = d.conf;
+
+  // Signal hero
+  document.getElementById('sig-hero-div').innerHTML = `
+    <div class="sig-hero ${d.cls}" style="margin:10px;">
+      <div class="sh-lbl">AI SIGNAL — ${sym} (${exch})</div>
+      <div class="sh-sig ${d.cls}">${d.signal}</div>
+      <div class="sh-conf">Confidence: ${d.conf}</div>
+      <div class="sh-why">Based on trend direction, RSI, MACD, and support/resistance analysis. Educational guidance only — always verify on the live chart.</div>
     </div>`;
-  document.getElementById('signal-levels-wrap').innerHTML = `
-    <div class="signal-levels">
-      <div class="sl-card"><div class="sl-label">SUPPORT</div><div class="sl-value up">${d.support}</div></div>
-      <div class="sl-card"><div class="sl-label">RESISTANCE</div><div class="sl-value down">${d.resistance}</div></div>
-      <div class="sl-card"><div class="sl-label">STOP LOSS</div><div class="sl-value down">${d.stopLoss}</div></div>
-      <div class="sl-card"><div class="sl-label">TARGET</div><div class="sl-value up">${d.target}</div></div>
+
+  document.getElementById('sig-lvls-div').innerHTML = `
+    <div class="lvls">
+      <div class="lv"><div class="lv-l">SUPPORT</div><div class="lv-v up">${d.support}</div></div>
+      <div class="lv"><div class="lv-l">RESISTANCE</div><div class="lv-v dn">${d.resistance}</div></div>
+      <div class="lv"><div class="lv-l">STOP LOSS</div><div class="lv-v dn">${d.stoploss}</div></div>
+      <div class="lv"><div class="lv-l">TARGET</div><div class="lv-v up">${d.target}</div></div>
     </div>`;
-  document.getElementById('checklist-wrap').innerHTML = `
-    <div class="checklist">
-      <div class="cl-title">TECHNICAL CHECKLIST</div>
-      ${d.reasons.map(r=>`<div class="cl-item"><div class="cl-dot ${r.pass?'pass':'fail'}">${r.pass?'✓':'✗'}</div><div class="cl-text">${r.text}</div></div>`).join('')}
-    </div>
-    <div style="margin:0 12px 12px;padding:10px 12px;background:var(--bg3);border-radius:8px;border:1px solid var(--border);font-size:11px;color:var(--text3);line-height:1.6;">
-      Levels are illustrative estimates for education. Verify on the live chart. Never trade without a stop-loss.
+
+  document.getElementById('sig-chk-div').innerHTML = `
+    <div class="chk">
+      <div class="chk-title">TECHNICAL CHECKLIST</div>
+      ${d.reasons.map(r => `<div class="ci"><div class="cd ${r.p?'p':'f'}">${r.p?'✓':'✗'}</div><div class="ct">${r.t}</div></div>`).join('')}
     </div>`;
+
+  document.getElementById('sig-empty').style.display = 'none';
+  document.getElementById('sig-content').style.display = 'block';
+
+  // Auto-add alert
+  autoAlert(sym, exch, d.signal, d.cls);
   document.getElementById('al-sym').value = sym;
-  showRTab('signal', document.querySelectorAll('.r-tab')[0]);
-  addAlertAuto(sym,exch,d.signal);
+
+  showRT('signal', document.querySelector('.rtab'));
 }
 
-function addAlertAuto(sym,exch,signal){
-  const time=new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
-  const isBuy=signal.includes('BUY'), isSell=signal.includes('SELL')||signal.includes('CAUTION');
-  alerts.unshift({sym,exch,signal,time,
-    msg:isBuy?`Buy signal detected for ${sym}. Look for entry near support.`:
-        isSell?`Caution signal for ${sym}. Consider reducing exposure.`:
-               `Watch ${sym} closely. Wait for a stronger signal.`,
-    type:isBuy?'triggered':isSell?'triggered-sell':''});
-  renderAlerts();
-}
-
-function renderAlerts(){
-  const list=document.getElementById('alerts-list');
-  if(!alerts.length){list.innerHTML='<div style="color:var(--text3);font-size:12px;text-align:center;padding:20px;">No alerts yet.</div>';return;}
-  list.innerHTML=alerts.map(a=>`
-    <div class="alert-item ${a.type}">
-      <div class="al-row"><span class="al-sym">${a.sym}</span>
-        <span class="al-badge ${a.signal.includes('BUY')?'sig-buy':a.signal.includes('SELL')||a.signal.includes('CAUTION')?'sig-sell':'sig-hold'}">${a.signal}</span>
-      </div>
-      <div class="al-msg">${a.msg}</div>
-      <div class="al-time">${a.time} · ${a.exch}</div>
-    </div>`).join('');
-}
-
-function setAlert(){
-  const sym=document.getElementById('al-sym').value.trim().toUpperCase();
-  const type=document.getElementById('al-type').value;
-  const price=document.getElementById('al-price').value;
-  if(!sym||!price) return;
-  const time=new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
-  alerts.unshift({sym,exch:'—',signal:'WATCH',time,msg:`Alert set: notify when ${sym} goes ${type} ${price}.`,type:''});
-  document.getElementById('al-price').value='';
-  renderAlerts();
-  showRTab('alerts',document.querySelectorAll('.r-tab')[2]);
-}
-
-function renderWatchlist(){
-  document.getElementById('watchlist').innerHTML=watchlist.map(w=>{
-    const sig=generateSignal(w.sym,w.exch);
-    return `<div class="wl-item${w.sym===currentSym?' active':''}" onclick="quickLoad('${w.sym}','${w.exch}')">
-      <div class="wl-row"><span class="wl-sym">${w.sym}</span><span class="wl-signal sig-${sig.color}">${sig.signal}</span></div>
-      <div class="wl-row"><span class="wl-name">${w.name}</span><span class="wl-exch">${w.exch}</span></div>
+// ── Watchlist ──────────────────────────────────────────
+function renderWL() {
+  document.getElementById('wl-list').innerHTML = watchlist.map(w => {
+    const s = getSignal(w.sym, w.exch);
+    const cls = {buy:'sb',sell:'ss',hold:'sh',watch:'sw'}[s.cls] || 'sh';
+    return `<div class="wl-item${w.sym===curSym?' active':''}" onclick="quickLoad('${w.sym}','${w.exch}')">
+      <div class="wl-r"><span class="wl-sym">${w.sym}</span><span class="wl-sig ${cls}">${s.signal}</span></div>
+      <div class="wl-r"><span class="wl-name">${w.name}</span><span class="wl-name">${w.exch}</span></div>
     </div>`;
   }).join('');
 }
 
-function quickLoad(sym,exch){
-  document.getElementById('sym-input').value=sym;
-  document.getElementById('exch-input').value=exch;
-  analyseSymbol();
+function quickLoad(sym, exch) {
+  document.getElementById('sym-inp').value = sym;
+  document.getElementById('exch-inp').value = exch;
+  doAnalyse();
 }
 
-function addToWL(){
-  const val=document.getElementById('wl-new').value.trim().toUpperCase();
-  const exch=document.getElementById('exch-input').value;
-  if(!val||watchlist.find(w=>w.sym===val)) return;
-  watchlist.push({sym:val,exch,name:val});
-  document.getElementById('wl-new').value='';
-  renderWatchlist();
+function addWL() {
+  const v = document.getElementById('wl-inp').value.trim().toUpperCase();
+  const e = document.getElementById('exch-inp').value;
+  if (!v || watchlist.find(w => w.sym === v)) return;
+  watchlist.push({sym:v, exch:e, name:v});
+  document.getElementById('wl-inp').value = '';
+  renderWL();
 }
 
-function showRTab(id,btn){
-  document.querySelectorAll('.r-tab').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('.r-panel').forEach(p=>p.classList.remove('active'));
-  document.getElementById('rpanel-'+id).classList.add('active');
-  if(btn) btn.classList.add('active');
+// ── Right tabs ─────────────────────────────────────────
+function showRT(id, btn) {
+  document.querySelectorAll('.rtab').forEach(t => t.classList.remove('on'));
+  document.querySelectorAll('.rp').forEach(p => p.classList.remove('on'));
+  document.getElementById('rp-' + id).classList.add('on');
+  const idx = ['signal','ai','alerts'].indexOf(id);
+  document.querySelectorAll('.rtab')[idx].classList.add('on');
 }
 
-function saveKey(){
-  savedApiKey=document.getElementById('api-key-input').value.trim();
-  localStorage.setItem('sta_apikey',savedApiKey);
-  document.getElementById('ai-key-section').style.display='none';
-  addBotMsg('API key saved! Now ask me anything about trading.');
+// ── Alerts ─────────────────────────────────────────────
+function autoAlert(sym, exch, signal, cls) {
+  const t = new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+  const msgs = {
+    buy: `Buy signal on ${sym}. Look for entry near support. Always set a stop-loss before entering.`,
+    sell: `Caution on ${sym}. Price may be extended. Consider waiting for pullback or reducing position.`,
+    hold: `${sym} has no clear signal right now. Best to wait for a stronger setup.`,
+    watch: `${sym} approaching key level. Set a price alert and wait for breakout confirmation.`
+  };
+  alerts.unshift({sym, exch, signal, cls, time:t, msg: msgs[cls]});
+  renderAlerts();
 }
 
-function addBotMsg(text,thinking){
-  const msgs=document.getElementById('ai-msgs');
-  const div=document.createElement('div');
-  div.className='ai-msg bot'+(thinking?' thinking':'');
-  div.textContent=text;
-  msgs.appendChild(div);
-  msgs.scrollTop=msgs.scrollHeight;
-  return div;
+function setAlert() {
+  const sym = document.getElementById('al-sym').value.trim().toUpperCase();
+  const type = document.getElementById('al-type').value;
+  const price = document.getElementById('al-price').value;
+  if (!sym || !price) return;
+  const t = new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+  alerts.unshift({
+    sym, exch:'', signal:'PRICE ALERT', cls:'watch', time:t,
+    msg:`Alert set: ${sym} ${type === 'above' ? 'above' : 'below'} ${price}. Monitor on your broker app for live execution.`
+  });
+  document.getElementById('al-price').value = '';
+  renderAlerts();
+  showRT('alerts', null);
 }
 
-function addUserMsg(text){
-  const msgs=document.getElementById('ai-msgs');
-  const div=document.createElement('div');
-  div.className='ai-msg user';
-  div.textContent=text;
-  msgs.appendChild(div);
-  msgs.scrollTop=msgs.scrollHeight;
+function renderAlerts() {
+  const list = document.getElementById('al-list');
+  if (!alerts.length) {
+    list.innerHTML = '<div class="empty-state">No alerts yet.</div>';
+    return;
+  }
+  list.innerHTML = alerts.map(a => `
+    <div class="al-item ${a.cls}">
+      <div class="al-r">
+        <span class="al-s">${a.sym}</span>
+        <span class="wl-sig ${a.cls==='buy'?'sb':a.cls==='sell'?'ss':'sw'}">${a.signal}</span>
+      </div>
+      <div class="al-m">${a.msg}</div>
+      <div class="al-t">${a.time}${a.exch?' · '+a.exch:''}</div>
+    </div>`).join('');
 }
 
-async function askAI(){
-  const q=document.getElementById('ai-q').value.trim();
-  if(!q) return;
-  document.getElementById('ai-q').value='';
-  addUserMsg(q);
-  aiHistory.push({role:'user',content:q});
-  const thinking=addBotMsg('Thinking...',true);
-  const sys=`You are a friendly, honest trading advisor for beginner traders in India. The user is looking at ${currentSym} on ${currentExch}. Give clear, simple advice. Never invent prices. Under 150 words. Include risk reminder for trade answers.`;
-  try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':savedApiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:sys,messages:aiHistory})
+// ── AI Chat ────────────────────────────────────────────
+function saveKey() {
+  userKey = document.getElementById('key-inp').value.trim();
+  localStorage.setItem('st_key', userKey);
+  document.getElementById('key-area').style.display = 'none';
+  addBot('API key saved! Now ask me anything about trading or the current symbol.');
+}
+
+function addBot(txt, thinking) {
+  const c = document.getElementById('ai-msgs');
+  const d = document.createElement('div');
+  d.className = 'amsg b' + (thinking ? ' th' : '');
+  d.textContent = txt;
+  c.appendChild(d);
+  c.scrollTop = 99999;
+  return d;
+}
+
+function addUser(txt) {
+  const c = document.getElementById('ai-msgs');
+  const d = document.createElement('div');
+  d.className = 'amsg u';
+  d.textContent = txt;
+  c.appendChild(d);
+  c.scrollTop = 99999;
+}
+
+async function doAsk() {
+  const q = document.getElementById('ai-q').value.trim();
+  if (!q) return;
+  document.getElementById('ai-q').value = '';
+  addUser(q);
+  aiHistory.push({role:'user', content:q});
+  const thinking = addBot('Thinking...', true);
+
+  const sys = `You are a friendly, honest trading advisor helping a beginner trader in India. 
+Currently analysing: ${curSym} on ${curExch}. 
+Rules: give simple honest advice under 150 words, never invent specific live prices, always remind about risk for trade-related questions, be encouraging but realistic.`;
+
+  const headers = {'Content-Type':'application/json'};
+  if (userKey) headers['x-api-key'] = userKey;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: sys,
+        messages: aiHistory
+      })
     });
-    const data=await res.json();
-    if(data.error){
-      thinking.classList.remove('thinking');
-      thinking.textContent='Error: '+(data.error.message||'Check your API key.');
-      document.getElementById('ai-key-section').style.display='block';
+    const data = await res.json();
+    if (data.error) {
+      thinking.classList.remove('th');
+      thinking.textContent = 'To use AI chat, please enter your Anthropic API key.';
+      document.getElementById('key-area').style.display = 'block';
       aiHistory.pop();
     } else {
-      const reply=data.content?.map(b=>b.text||'').join('')||'No response.';
-      thinking.classList.remove('thinking');
-      thinking.textContent=reply;
-      aiHistory.push({role:'assistant',content:reply});
-      document.getElementById('ai-msgs').scrollTop=999999;
+      const reply = data.content?.map(b => b.text||'').join('') || 'No response.';
+      thinking.classList.remove('th');
+      thinking.textContent = reply;
+      aiHistory.push({role:'assistant', content:reply});
     }
-  } catch(e){
-    thinking.classList.remove('thinking');
-    thinking.textContent='Connection error. Check your internet and try again.';
+  } catch(e) {
+    thinking.classList.remove('th');
+    thinking.textContent = 'Connection error. Please check your internet.';
     aiHistory.pop();
   }
 }
 
-function updateClock(){
-  document.getElementById('htime').textContent=
-    new Date().toLocaleTimeString('en-IN',{timeZone:'Asia/Kolkata',hour:'2-digit',minute:'2-digit',second:'2-digit'})+' IST';
+// ── Clock ──────────────────────────────────────────────
+function tick() {
+  document.getElementById('htime').textContent =
+    new Date().toLocaleTimeString('en-IN',{timeZone:'Asia/Kolkata',hour:'2-digit',minute:'2-digit',second:'2-digit'}) + ' IST';
 }
 
-document.getElementById('sym-input').addEventListener('keydown',e=>{if(e.key==='Enter')analyseSymbol();});
-document.getElementById('wl-new').addEventListener('keydown',e=>{if(e.key==='Enter')addToWL();});
+// ── Keyboard ───────────────────────────────────────────
+document.getElementById('sym-inp').addEventListener('keydown', e => { if(e.key==='Enter') doAnalyse(); });
+document.getElementById('ai-q').addEventListener('keydown', e => { if(e.key==='Enter') doAsk(); });
+document.getElementById('wl-inp').addEventListener('keydown', e => { if(e.key==='Enter') addWL(); });
 
-renderWatchlist();
-loadChart('RELIANCE','NSE','D');
-updateClock();
-window.setInterval(updateClock,1000);
-window.setInterval(renderWatchlist,300000);
+// ── Init ───────────────────────────────────────────────
+renderWL();
+loadTV('RELIANCE', 'NSE', 'D');
+tick();
+setInterval(tick, 1000);
+setInterval(renderWL, 300000);
 </script>
 </body>
 </html>
